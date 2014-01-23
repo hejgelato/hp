@@ -178,11 +178,30 @@ class hp_table{
 		$this->sql = $sql;
 		$this->exe_sql( $sql, $this->args_where );
 		if($this->query_return){
-			return $this->query_data_set;
+			$data_set =  $this->query_data_set;
+			return $this->filter_data_set( $data_set );
 		}else{
 			return $this->query_return;
 		}
 	}
+	//对数据库结果集进行过滤,只保留fields存在的字段
+	public function filter_data_set( $data_set ){
+		if(!$data_set) return $data_set;
+		if(is_array($data_set)){
+			foreach($data_set as $k=>&$v){
+				if(is_array($v)){
+					foreach($v as $kk=>$vv){
+						if(!in_array($kk,$this->fields,true)){
+							unset($v[$kk]);
+						}
+					}
+				}
+			}
+			return $data_set;
+		}
+		return $data_set;
+	}
+
 	public function count($count='*'){
 		$count = $this->select("count( $count ) as c ");
 		if($count){
