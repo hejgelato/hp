@@ -6,16 +6,17 @@ class index_action extends hp_controller{
 		$b = new test();
 		$c = new test();
 		 
-		//$this->test_where();
-		$this->test_save();
+		$this->test_select();
+		//$this->test_save();
 	}
 
-	public function test_where(){
+	public function test_select(){
 		$a = new test();
-		$a->where('a = ?', array('24'));
+		$a->where('name = ?', array('mike'));
 		echo $a->where;
-		next_line();
+		 
 		dump( $a->args_where );
+		dump($a->select());
 	}
 
 	public function test_save(){

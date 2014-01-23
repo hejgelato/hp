@@ -3,7 +3,7 @@ define('CONF_PATH',dirname(__FILE__).'/');
 
 //全局变量放在这里
 $hp_env_vars = array();
-require_once(CONF_PATH.'base/core/funcs/common.php');
+require_once(CONF_PATH.'base/core/funcs/hp_common.php');
 //数据库配置
 $hp_db_configs = array();
 $hp_db_configs['default'] = array(
