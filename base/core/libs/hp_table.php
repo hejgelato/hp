@@ -15,7 +15,6 @@ class hp_table{
 	public $limit = '';                     //limit 语句
 	public $select = '';                    //select语句
 	public $sql = '';                       //sql语句
-	public $last_insert_id = null;      
 	public $query_return = null;            //执行sql语句返回的结果
 	public $query_data_set = null;          //执行sql语句返回的结果集
 	public $query_affected_count = null;    //执行sql语句影响到的行数
@@ -32,7 +31,6 @@ class hp_table{
 		$this->limit = '';                     
 		$this->select = '';                    
 		$this->sql = ''; 
-		$this->last_insert_id = null;
 		$this->query_return = null;
 		$this->query_data_set = null;
 		$this->query_affected_count = null;
