@@ -21,7 +21,7 @@ $hp_db_configs['test'] = array(
 $hp_env_vars['db_config'] = $hp_db_configs;
 //默认模块
  
-$hp_default_module = 'default';
+$hp_default_module = 'test';
 $hp_env_vars['default_module'] = $hp_default_module;
 
 
