@@ -17,6 +17,9 @@ class hp_table{
 	public $sql = '';                       //sql语句
 	public $last_insert_id = null;      
 	public $query_return = null;            //执行sql语句返回的结果
+	public $query_data_set = null;          //执行sql语句返回的结果集
+	public $query_affected_count = null;    //执行sql语句影响到的行数
+	
 
 	//初始化，把对象的部分状态初始化，比如单例模式中，虽然不重新new一个对象，但是应该清理之前的
 	//使用者留下的痕迹 被单例函数使用
@@ -31,6 +34,8 @@ class hp_table{
 		$this->sql = ''; 
 		$this->last_insert_id = null;
 		$this->query_return = null;
+		$this->query_data_set = null;
+		$this->query_affected_count = null;
 	}
 
 	public function __construct(){
@@ -61,18 +66,21 @@ class hp_table{
 		return self::$con[$mark];
 	}
 	//执行sql
-	public function exe_sql($sql, $args = array()) {
+	protected function exe_sql($sql, $args = array()) {
+		$this->query_return = null;
+		$this->query_data_set = null;
+		$this->query_affected_count = null;
+
 		$stat = $this->pdo->prepare ( $sql );
-		$result = $stat->execute ( $args );
+		$result = $stat->execute( $args );
 		$this->query_return = $result;
 		if($result){
-			$rs = $stat->fetchAll();
-			return $rs;
+			$this->query_data_set = $stat->fetchAll();
+			$this->query_affected_count = $stat->rowCount();
 		}else{
 			var_dump($stat->errorCode());
 			var_dump($stat->errorInfo());
 			$this->show_error();
-			return $result;
 		}
 	}
 
@@ -170,7 +178,12 @@ class hp_table{
 		}
 		$sql = "select ".$this->select." from ".$this->table." $where_str $order_str $limit_str";
 		$this->sql = $sql;
-		return $this->exe_sql( $sql, $this->args_where );
+		$this->exe_sql( $sql, $this->args_where );
+		if($this->query_return){
+			return $this->query_data_set;
+		}else{
+			return $this->query_return;
+		}
 	}
 	public function count($count='*'){
 		$count = $this->select("count( $count ) as c ");
@@ -180,27 +193,7 @@ class hp_table{
 			return 0;
 		}
 	}
-	//查询结果转为数组
-	protected function obj_array($obj){
-		if($obj === false) return false;
-		$arr = array();
-		if($obj){
-			foreach($obj as $k=>$v){
-				$arr[$k] =  self::strip_array_html($v) ;
-			}
-		}
-		return $arr;
-	}
-	//结果数组过滤html
-	protected function strip_array_html($arr){
-		$new = array();
-		foreach($arr as  $k=>$v){
-			if(!is_numeric ($k)){
-				$new[$k] = htmlspecialchars($v);
-			}
-		}
-		return $new;
-	}
+	 
 	//save函数 执行insert
 	public function save(){
 		//检查一些必要条件
@@ -212,9 +205,7 @@ class hp_table{
 		$sql = "insert into ".$this->table." set $data_str";  
 		$this->exe_sql( $sql, $this->args_data );
 		if($this->query_return){
-			$id =  $this->pdo->query('select last_insert_id() as i');
-			$id = self::obj_array($id); 
-			return $id[0]['i'];
+			return $this->pdo->lastInsertId();
 		}else{
 			return $this->query_return;
 		}
@@ -227,18 +218,21 @@ class hp_table{
 		$data_str = $this->parse_data( $this->data );
 		//查询sql
 		if(!$this->where){
-			exit("update db without where, be careful! try to use query(...)"); 
+			exit("update db without where statement, be careful! try to use exe_sql(...)"); 
 		} 
-
 		$sql = "update ".$this->table." set $data_str where ".$this->where;
 		$this->sql = $sql;
 		$this->exe_sql( $sql, array_merge($this->args_data,$this->args_where) );
-		return $this->query_return;
+		if($this->query_return){
+			return $this->query_affected_count ;
+		}else{
+			return $this->query_return;
+		}
 	}
 	//delete函数 , 执行delete
 	public function delete(){
 		if(!$this->where){
-			exit("delete db without where, be careful! try to use query(...)"); 
+			exit("delete db without where statement, be careful! try to use exe_sql(...)"); 
 		}
 		$sql = "delete from ".$this->table."  where ".$this->where;
 		$sql = mysql_real_escape_string($sql);
