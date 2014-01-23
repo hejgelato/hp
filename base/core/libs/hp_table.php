@@ -167,6 +167,14 @@ class hp_table{
 		$this->sql = $sql;
 		return $this->exe_sql( $sql, $this->args );
 	}
+	public function count($count='*'){
+		$count = $this->select("count( $count ) as c ");
+		if($count){
+			return $count[0]['c'];
+		}else{
+			return 0;
+		}
+	}
 	//查询结果转为数组
 	protected function obj_array($obj){
 		if($obj === false) return false;
