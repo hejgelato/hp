@@ -4,13 +4,12 @@ class hp_table{
 	static $con = null;                //用于存放一个数据库连接,检查单例
 	public $db_conf = 'default';             //数据库配置
 	
-	public $fields = array(
-		'id',	
-	);                 //表对应的字段
+	public $fields = array();               //表对应的字段
 	public $pdo = null;                     //对象的数据库连接
 	public $table = '';                     //对应的表
 	public $where = '';                     //查询条件
-	public $args  = array();			    //pdo->execute用的代替？的参数
+	public $args_where  = array();			//sql语句查询条件用的代替？的参数
+	public $args_data   = array();          //sql语句插入或者更新部分用的代替?的参数
 	public $data = array();                 //数据
 	public $order = '';                     //排序语句
 	public $limit = '';                     //limit 语句
@@ -23,7 +22,8 @@ class hp_table{
 	//使用者留下的痕迹 被单例函数使用
 	public function _renew(){
 		$this->where = '';    
-		$this->args = array();
+		$this->args_where = array();
+		$this->args_data = array();
 		$this->data = array();                      
 		$this->order = '';                      
 		$this->limit = '';                     
@@ -94,7 +94,7 @@ class hp_table{
 		if(!$data){
 			$this->data = array();
 		}
-		$this->args = array_merge($this->args, $temp_args);
+		$this->args_data = $temp_args ;
 		return $this;
 	}
 
@@ -103,11 +103,11 @@ class hp_table{
 	public function where($where=null, $args = array()){
 		if(!$where){
 			$this->where = '';
-			$this->args = array();
+			$this->args_where = array();
 		}elseif(!is_array($where)){
 			$where = trim($where);
 			$this->where = $where;
-			$this->args = array_merge($this->args, $args);
+			$this->args_where =  $args ;
 		}elseif(is_array($where)){
 			$str = '';
 			$temp_args = array();
@@ -117,7 +117,7 @@ class hp_table{
 			}
 			$str = trim($str,'and ');
 			$this->where = $str;
-			$this->args = array_merge($this->args, $temp_args);
+			$this->args_where = $temp_args ;
 		}
 		return $this;
 	}
@@ -165,7 +165,7 @@ class hp_table{
 		}
 		$sql = "select ".$this->select." from ".$this->table." $where_str $order_str $limit_str";
 		$this->sql = $sql;
-		return $this->exe_sql( $sql, $this->args );
+		return $this->exe_sql( $sql, $this->args_where );
 	}
 	public function count($count='*'){
 		$count = $this->select("count( $count ) as c ");
@@ -201,7 +201,7 @@ class hp_table{
 		$data_str = $this->parse_data( $this->data );
 		$sql = "insert ".$this->table." set $data_str";
 		$this->sql = $sql;
-		$this->exe_sql( $sql, $this->args );
+		$this->exe_sql( $sql, $this->args_data );
 		if($this->query_return){
 			$id =  $this->pdo->query('select last_insert_id() as i');
 			$id = self::obj_array($id); 
@@ -220,7 +220,7 @@ class hp_table{
 
 		$sql = "update ".$this->table." set $data_str where ".$this->where;
 		$this->sql = $sql;
-		$this->exe_sql( $sql, $this->args );
+		$this->exe_sql( $sql, array_merge($this->args_data,$this->args_where) );
 		return $this->query_return;
 	}
 	//delete函数 , 执行delete
