@@ -149,6 +149,11 @@ class hp_table{
 		}
 		return $this;
 	}
+	//返回一条数据，结果是一d数据
+	public function select_one( $select=null ){
+		$result = $this->select($select);
+		return $result[0];
+	}
 	//select方法，查询sql
 	public function select($select=null){
 		if(!$this->table){
@@ -184,6 +189,7 @@ class hp_table{
 			return $this->query_return;
 		}
 	}
+
 	//对数据库结果集进行过滤,只保留fields存在的字段
 	public function filter_data_set( $data_set ){
 		if(!$data_set) return $data_set;
@@ -203,9 +209,9 @@ class hp_table{
 	}
 
 	public function count($count='*'){
-		$count = $this->select("count( $count ) as c ");
+		$count = $this->select_one(" count( $count ) as c ");
 		if($count){
-			return $count[0]['c'];
+			return $count['c'];
 		}else{
 			return 0;
 		}

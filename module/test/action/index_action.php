@@ -16,7 +16,7 @@ class index_action extends hp_controller{
 		echo $a->where;
 		 
 		dump( $a->args_where );
-		dump($a->select());
+		dump($a->select_one());
 	}
 
 	public function test_save(){
