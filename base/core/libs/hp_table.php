@@ -64,11 +64,13 @@ class hp_table{
 	public function exe_sql($sql, $args = array()) {
 		$stat = $this->pdo->prepare ( $sql );
 		$result = $stat->execute ( $args );
-		$this->query_result = $result;
+		$this->query_return = $result;
 		if($result){
 			$rs = $stat->fetchAll();
 			return $rs;
 		}else{
+			var_dump($stat->errorCode());
+			var_dump($stat->errorInfo());
 			$this->show_error();
 			return $result;
 		}
@@ -143,6 +145,9 @@ class hp_table{
 	}
 	//select方法，查询sql
 	public function select($select=null){
+		if(!$this->table){
+			exit('no table');
+		}
 		if(!$select){
 			$select = '*';
 		}
@@ -198,9 +203,13 @@ class hp_table{
 	}
 	//save函数 执行insert
 	public function save(){
+		//检查一些必要条件
+		if(!$this->table){
+			exit('no table');
+		}
+
 		$data_str = $this->parse_data( $this->data );
-		$sql = "insert ".$this->table." set $data_str";
-		$this->sql = $sql;
+		$sql = "insert into ".$this->table." set $data_str";  
 		$this->exe_sql( $sql, $this->args_data );
 		if($this->query_return){
 			$id =  $this->pdo->query('select last_insert_id() as i');
@@ -212,6 +221,9 @@ class hp_table{
 	}
 	//update函数 执行update
 	public function update(){
+		if(!$this->table){
+			exit('no table');
+		}
 		$data_str = $this->parse_data( $this->data );
 		//查询sql
 		if(!$this->where){
@@ -250,7 +262,7 @@ class hp_table{
 	}
 	//show_error()
 	public function show_error(){
-		echo $this->pdo->errorCode();
-		echo $this->pdo->errorInfo();
+		var_dump( $this->pdo->errorCode());
+		var_dump( $this->pdo->errorInfo());
 	}
 }

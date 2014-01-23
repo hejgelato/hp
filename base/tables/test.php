@@ -2,10 +2,10 @@
 class test extends hp_table{
 	 
 	public $db_conf = 'default';             //数据库配置
-	
+	public $table = 'test';
 	public $fields = array(
 		'id',
-		'a','b'
+		'name','age'
 	);                  
 	 
 	
