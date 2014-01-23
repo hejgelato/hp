@@ -5,7 +5,7 @@ class test extends hp_table{
 	
 	public $fields = array(
 		'id',
-		'a','b','c'
+		'a','b'
 	);                  
 	 
 	
