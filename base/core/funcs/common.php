@@ -19,3 +19,7 @@ function sql_start( $sql ){
 	}
 	return false;
 }
+
+function sys_exit($msg=null){
+	exit($msg);
+}
