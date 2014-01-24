@@ -62,7 +62,16 @@ function sys_exit($msg=''){
 	}
 	exit();
 }
- 
+//utf8 的输出错误并退出
+function cn_exit($msg){
+	header('Content-type:text/html;charset=utf8');
+	exit($msg);
+}
+//调转到404页面
+function show_404($msg=null){
+	header('Content-type:text/html;charset=utf8');
+	exit('404'.$msg);
+}
 
 function next_line(){
 	echo "<br/>";
