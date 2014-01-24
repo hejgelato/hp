@@ -7,10 +7,10 @@ class index_action extends hp_controller{
 		$c = new test();
 		 
 		//$this->test_select();
-		//$this->test_save();
+		$this->test_save();
 		//$this->test_update();
 		//$this->test_delete();
-		$this->test_query();
+		//$this->test_query();
 	}
 
 	public function test_select(){
@@ -52,7 +52,7 @@ class index_action extends hp_controller{
 		//dump($a->query("select * from test where id = ?",array(3)));
 		//dump($a->query("update test set name= ? where id =?", array('g',3)));
 		//dump($a->query("insert into test set name= ? ,age =?", array('gb',13)));
-		dump($a->query("delete from stest where age =?", array( 2)));
+		dump($a->query("delete from test where age =?", array( 2)));
 		
 	}
 	public function _z(){
