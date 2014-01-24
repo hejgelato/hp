@@ -30,7 +30,7 @@ function arr_readable($arr){
 	//输出信息并停止脚本
 function sys_exit($msg=''){
 	header('Content-type:text/html;charset=utf8');
-	$info =  debug_backtrace();
+	
 	$log = array();
 	$log['exit_msg'] = $msg;
 	$log['hp_path'] = env('hp_path');
@@ -44,6 +44,7 @@ function sys_exit($msg=''){
 	if(isset($_SERVER['HTTP_REFERER'])){
 		$log['ref'] = $_SERVER['HTTP_REFERER'];
 	}
+	$info =  debug_backtrace();
 	if($info){
 		foreach($info as $var){
 			$log[] = $var['file'].':'.$var['line'];
@@ -54,6 +55,10 @@ function sys_exit($msg=''){
 		dump( $log );
 	}else{
 		echo '查看详细信息,请设置dev_mode=true';
+	}
+	//记录日志
+	if(env('log_user_runtime')){
+		logger::write('php_sys_exit_log',$log);
 	}
 	exit();
 }

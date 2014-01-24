@@ -83,8 +83,7 @@ class hp_table{
 		}elseif(sql_start($sql, 'select')){
 			$this->exe_sql($sql, $args);
 			if($this->query_return){
-				$data_set =  $this->query_data_set;
-				return $this->filter_data_set( $data_set );
+				return  $this->query_data_set;
 			}else{
 				//查询不到数据的时候返回空白数组
 				return array();
@@ -247,6 +246,10 @@ class hp_table{
 			return array();
 		}
 	}
+	//同select_one
+	public function select_first($select=null){
+		return $this->select_one($select);
+	}
 	//只执行select语句
 	protected function _select($select=null){
 		if(!$this->table){
@@ -349,7 +352,6 @@ class hp_table{
 		}else{
 			return $this->query_return;
 		}
-
 	}
 
 	//数据组成字符串
