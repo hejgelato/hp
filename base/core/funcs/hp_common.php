@@ -1,7 +1,5 @@
 <?php
-define('CORE_FUNC_PATH',dirname(__FILE__).'/');
-include_once(CORE_FUNC_PATH.'hp_env_vars.php');
-include_once(CORE_FUNC_PATH.'hp_ip.php');
+
 
 //实例化并且单例
 function single($class){
