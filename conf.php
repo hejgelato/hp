@@ -8,7 +8,7 @@ date_default_timezone_set("Asia/Shanghai");
 
 //全局变量放在这里
 $hp_env_vars = array();
-require_once(CONF_PATH.'base/core/funcs/hp_common.php');
+require_once(CONF_PATH.'base/core/funcs/hp_load_funcs.php');
 
 
 /**数据库配置++++++++++++++++++**/
