@@ -27,4 +27,6 @@ spl_autoload_register('loader');
 include_once(INIT_PATH.'funcs/load_funcs.php');
 //载入对应模块的函数
 $temp_current_module = env('current_module');
-include_once(INIT_PATH."../module/{$temp_current_module}/funcs/load_funcs.php");
+if($temp_current_module){
+	include_once(INIT_PATH."../module/{$temp_current_module}/funcs/load_funcs.php");
+}
