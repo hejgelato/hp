@@ -72,8 +72,7 @@ if($hp_path){
 		exit('module name invalid!');
 	}
 	require_once(WEB_PATH."init.php");
-	//载入对应模块的函数
-	include_once(WEB_PATH."../module/{$m}/funcs/load_funcs.php");
+	
 	session_start();
 	//运行action
 	if(class_exists($c)){
