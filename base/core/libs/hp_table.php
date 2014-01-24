@@ -63,6 +63,36 @@ class hp_table{
 		}
 		return self::$con[$mark];
 	}
+	//通用的执行sql的函数
+	public function query( $sql, $args = array()){
+		$sql = trim($sql);
+		if(sql_start($sql, 'update','delete')){
+			$this->exe_sql($sql, $args);
+			if($this->query_return){
+				return $this->query_affected_count ;
+			}else{
+				return $this->query_return;
+			}
+		}elseif(sql_start($sql, 'insert')){  
+			$this->exe_sql($sql, $args);
+			if($this->query_return){
+				return $this->pdo->lastInsertId();
+			}else{
+				return $this->query_return;
+			}
+		}elseif(sql_start($sql, 'select')){
+			$this->exe_sql($sql, $args);
+			if($this->query_return){
+				$data_set =  $this->query_data_set;
+				return $this->filter_data_set( $data_set );
+			}else{
+				//查询不到数据的时候返回空白数组
+				return array();
+			}
+		}else{
+			sys_exit("can only query() select, insert ,update, delete.");
+		}
+	}
 	//执行sql
 	protected function exe_sql($sql, $args = array()) {
 		$this->query_return = null;
@@ -76,9 +106,14 @@ class hp_table{
 			$this->query_data_set = $stat->fetchAll();
 			$this->query_affected_count = $stat->rowCount();
 		}else{
-			var_dump($stat->errorCode());
-			var_dump($stat->errorInfo());
-			$this->show_error();
+			if(env('dev_mode')){
+				
+				dump($stat->errorCode());
+				dump($stat->errorInfo());
+			
+				$this->show_error();
+				sys_exit("sql语句执行返回了false");
+			}
 		}
 	}
 
@@ -157,7 +192,7 @@ class hp_table{
 	//select方法，查询sql
 	public function select($select=null){
 		if(!$this->table){
-			exit('no table');
+			sys_exit('no table');
 		}
 		if(!$select){
 			$select = '*';
@@ -186,7 +221,8 @@ class hp_table{
 			$data_set =  $this->query_data_set;
 			return $this->filter_data_set( $data_set );
 		}else{
-			return $this->query_return;
+			//查询不到数据的时候返回空白数组
+			return array();
 		}
 	}
 
@@ -221,7 +257,7 @@ class hp_table{
 	public function save(){
 		//检查一些必要条件
 		if(!$this->table){
-			exit('no table');
+			sys_exit('no table');
 		}
 
 		$data_str = $this->parse_data( $this->data );
@@ -236,12 +272,12 @@ class hp_table{
 	//update函数 执行update
 	public function update(){
 		if(!$this->table){
-			exit('no table');
+			sys_exit('no table');
 		}
 		$data_str = $this->parse_data( $this->data );
 		//查询sql
 		if(!$this->where){
-			exit("update db without where statement, be careful! try to use exe_sql(...)"); 
+			sys_exit("update db without where statement, be careful!"); 
 		} 
 		$sql = "update ".$this->table." set $data_str where ".$this->where;
 		$this->sql = $sql;
@@ -254,13 +290,21 @@ class hp_table{
 	}
 	//delete函数 , 执行delete
 	public function delete(){
+		if(!$this->table){
+			sys_exit('no table');
+		}
 		if(!$this->where){
-			exit("delete db without where statement, be careful! try to use exe_sql(...)"); 
+			sys_exit("delete db without where statement, be careful!"); 
 		}
 		$sql = "delete from ".$this->table."  where ".$this->where;
-		$sql = mysql_real_escape_string($sql);
+		 
 		$this->sql = $sql;
-		return $this->pdo->exec( $sql );
+		$this->exe_sql( $sql, $this->args_where );
+		if($this->query_return){
+			return $this->query_affected_count ;
+		}else{
+			return $this->query_return;
+		}
 
 	}
 
@@ -279,7 +323,7 @@ class hp_table{
 	}
 	//show_error()
 	public function show_error(){
-		var_dump( $this->pdo->errorCode());
-		var_dump( $this->pdo->errorInfo());
+		dump( $this->pdo->errorCode());
+		dump( $this->pdo->errorInfo());
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 define('CORE_FUNC_PATH',dirname(__FILE__).'/');
 include_once(CORE_FUNC_PATH.'hp_env_vars.php');
+include_once(CORE_FUNC_PATH.'hp_ip.php');
 
 //实例化并且单例
 function single($class){
@@ -19,10 +20,46 @@ function sql_start( $sql ){
 	}
 	return false;
 }
-
-function sys_exit($msg=null){
-	exit($msg);
+//数组输出字符串
+function arr_readable($arr){
+	if(!$arr) return '';
+	$str = '';
+	foreach($arr as $k=>$v){
+		$str.= " $k : $v".'|';
+	}
+	return $str;
+} 
+	//输出信息并停止脚本
+function sys_exit($msg=''){
+	header('Content-type:text/html;charset=utf8');
+	$info =  debug_backtrace();
+	$log = array();
+	$log['exit_msg'] = $msg;
+	$log['hp_path'] = env('hp_path');
+	 
+	if(isset($_SESSION)){
+		$log['session_str'] = arr_readable($_SESSION);
+	}
+	if(isset($_SERVER['HTTP_USER_AGENT'])){
+		$log['agent'] = $_SERVER['HTTP_USER_AGENT'];
+	}
+	if(isset($_SERVER['HTTP_REFERER'])){
+		$log['ref'] = $_SERVER['HTTP_REFERER'];
+	}
+	if($info){
+		foreach($info as $var){
+			$log[] = $var['file'].':'.$var['line'];
+		}
+	}
+	echo "页面发生了错误：";
+	if(env('dev_mode')){
+		dump( $log );
+	}else{
+		echo '查看详细信息,请设置dev_mode=true';
+	}
+	exit();
 }
+ 
 
 function next_line(){
 	echo "<br/>";
