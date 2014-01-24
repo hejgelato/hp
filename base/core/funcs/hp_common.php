@@ -69,8 +69,11 @@ function cn_exit($msg){
 }
 //调转到404页面
 function show_404($msg=null){
-	header('Content-type:text/html;charset=utf8');
-	exit('404'.$msg);
+	if(!env('dev_mode')){
+		header('Location:'.BASE_HTML_URL.'404.html');
+	}else{
+		cn_exit('404-'.$msg);
+	}
 }
 
 function next_line(){

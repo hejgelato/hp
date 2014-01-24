@@ -9,6 +9,12 @@ date_default_timezone_set("Asia/Shanghai");
 //全局变量放在这里
 $hp_env_vars = array();
 require_once(CONF_PATH.'base/core/funcs/hp_load_funcs.php');
+/**配置URL地址**********************/
+define('URL', $_SERVER['HTTP_HOST'].'/');
+//公共html地址 
+define('BASE_HTML_URL','http://'.URL.'base/html/');
+ 
+
 
 
 /**数据库配置++++++++++++++++++**/
