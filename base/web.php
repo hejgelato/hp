@@ -2,10 +2,11 @@
 //处理url index.php?s=/sdf/sdf/sdf/sdf/
 define('WEB_PATH',dirname(__FILE__).'/');
 include_once(WEB_PATH."route.php");
-$hp_path = isset($_GET['s'])?$_GET['s']:'/';
+$hp_path = isset($_GET['s'])?$_GET['s']:'/'; 
 if($hp_path){
+	 
 	if(array_key_exists($hp_path, env('route'))){
-		$route = $env('route');
+		$route = env('route');
 		$hp_path = $route[$hp_path];
 	}
 	$hp_env_vars['hp_path'] = $hp_path;
@@ -22,6 +23,11 @@ if($hp_path){
 	}else{
 		$m = $hp_default_module;
 	}
+	if(!in_array($m, env('valid_modules'), true)){
+		//跳到404页面
+		show_404("找不到模块:$m");
+	}
+
 	$hp_env_vars['current_module'] = $m;
 	//action名
 	if(isset($new[0])){
@@ -30,7 +36,7 @@ if($hp_path){
 	}else{
 		$c = 'index_action';
 	}
-	$hp_env_vars['current_controller'] = $m;
+	$hp_env_vars['current_controller'] = $c;
 	//action的方法名
 	if(isset($new[0])){
 		$a = trim(array_shift($new));
@@ -68,9 +74,7 @@ if($hp_path){
 		}
 	}
 	
-	if(strstr($m,'.')){
-		exit('module name invalid!');
-	}
+	 
 	require_once(WEB_PATH."init.php");
 	
 	session_start();
@@ -83,6 +87,6 @@ if($hp_path){
 		$action->_z();
 		 
 	}else{
-		exit("web:php: $c does not exist module: $m ");
+		show_404("找不到控制器:$c");
 	}
 }	 
