@@ -20,7 +20,7 @@ class index_action extends hp_controller{
 		 
 		//dump( $a->select() );
 		//dump($a->select_one());
-		dump($a->select_col('name'));
+		dump($a->select_col('xname'));
 		dump($a->select_grp('name'));
 		dump($a->select_grp('id'));
 	}
@@ -52,9 +52,9 @@ class index_action extends hp_controller{
 
 	public function test_query(){
 		$a = new test();
-		//dump($a->query("select * from test where id = ?",array(3)));
-		//dump($a->query("update test set name= ? where id =?", array('g',3)));
-		//dump($a->query("insert into test set name= ? ,age =?", array('gb',13)));
+		 dump($a->query("select * from test where id = ?",array(3)));
+		 dump($a->query("update test set name= ? where id =?", array('g',3)));
+		 dump($a->query("insert into test set name= ? ,age =?", array('gb',13)));
 		dump($a->query("delete from test where age =?", array( 2)));
 		
 	}

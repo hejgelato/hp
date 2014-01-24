@@ -40,7 +40,9 @@ $hp_env_vars['default_module'] = $hp_default_module;
 $hp_dev_mode = true;
 $hp_env_vars['dev_mode'] = $hp_dev_mode;
 
-/**是否记录错误退出信息+++ true or false +++++++++++**/
-$hp_log_error = false;
-$hp_env_vars['log_error'] = $hp_log_error; 
-
+/**是否记录错误退出信息到日志文件+++ true or false +++++++++++**/
+$hp_log_user_runtime = true;
+$hp_env_vars['log_user_runtime'] = $hp_log_user_runtime; 
+/**记录错误退出信息日志的路径 +++  +++++++++++**/
+$hp_log_dir = CONF_PATH.'files/logs/';
+$hp_env_vars['log_dir'] = $hp_log_dir;
