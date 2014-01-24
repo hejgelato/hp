@@ -6,8 +6,8 @@ class index_action extends hp_controller{
 		$b = new test();
 		$c = new test();
 		 
-		//$this->test_select();
-		$this->test_save();
+		 $this->test_select();
+		// $this->test_save();
 		//$this->test_update();
 		//$this->test_delete();
 		//$this->test_query();
@@ -18,8 +18,9 @@ class index_action extends hp_controller{
 		$a->where('name = ?', array('mike'));
 		echo $a->where;
 		 
-		dump( $a->args_where );
-		dump($a->select_one());
+		//dump( $a->select() );
+		//dump($a->select_one());
+		dump($a->select_column('name'));
 	}
 
 	public function test_save(){

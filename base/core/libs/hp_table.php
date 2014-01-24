@@ -43,7 +43,7 @@ class hp_table{
 		$this->pdo = self::get_pdo( $conf );		
 	}
 	//生成一个数据库pdo连接
-	static public function  get_pdo( $conf ){ 
+	static public function get_pdo( $conf ){ 
 		$mark = data_key::data_get_key($conf);
 		if(!$mark){
 			sys_exit('db config key empty!');
@@ -103,7 +103,8 @@ class hp_table{
 		$result = $stat->execute( $args );
 		$this->query_return = $result;
 		if($result){
-			$this->query_data_set = $stat->fetchAll();
+			$this->pdo_statement = $stat;
+			$this->query_data_set = $stat->fetchAll(PDO::FETCH_ASSOC);
 			$this->query_affected_count = $stat->rowCount();
 		}else{
 			if(env('dev_mode')){
@@ -184,13 +185,29 @@ class hp_table{
 		}
 		return $this;
 	}
+	//只返回指定的列名的数据 一d数据
+	public function select_column($col){
+		if(!$col){
+			return array();
+		}
+		$this->_select('*');
+		$data = $this->query_data_set;
+		$return = array();
+		if($data){
+			foreach($data as  $v){
+				$return[] = $v[$col];
+			}
+		}
+		return $return;
+		 
+	}
 	//返回一条数据，结果是一d数据
 	public function select_one( $select=null ){
 		$result = $this->select($select);
 		return $result[0];
 	}
-	//select方法，查询sql
-	public function select($select=null){
+	//只执行select语句
+	protected function _select($select=null){
 		if(!$this->table){
 			sys_exit('no table');
 		}
@@ -217,33 +234,19 @@ class hp_table{
 		$sql = "select ".$this->select." from ".$this->table." $where_str $order_str $limit_str";
 		$this->sql = $sql;
 		$this->exe_sql( $sql, $this->args_where );
+	}
+	//select方法，查询sql
+	public function select($select=null){
+		$this->_select($select);
 		if($this->query_return){
-			$data_set =  $this->query_data_set;
-			return $this->filter_data_set( $data_set );
+			$data_set = $this->query_data_set;
+			return $data_set;
 		}else{
 			//查询不到数据的时候返回空白数组
 			return array();
 		}
 	}
-
-	//对数据库结果集进行过滤,只保留fields存在的字段
-	public function filter_data_set( $data_set ){
-		if(!$data_set) return $data_set;
-		if(is_array($data_set)){
-			foreach($data_set as $k=>&$v){
-				if(is_array($v)){
-					foreach($v as $kk=>$vv){
-						if(!in_array($kk,$this->fields,true)){
-							unset($v[$kk]);
-						}
-					}
-				}
-			}
-			return $data_set;
-		}
-		return $data_set;
-	}
-
+ 
 	public function count($count='*'){
 		$count = $this->select_one(" count( $count ) as c ");
 		if($count){
