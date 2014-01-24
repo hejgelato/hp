@@ -6,8 +6,4 @@ error_reporting(E_ALL);
 require_once('conf.php');
 require_once('base/web.php');
 
-
- 
-
-
 ?>
