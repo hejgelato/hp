@@ -20,7 +20,9 @@ class index_action extends hp_controller{
 		 
 		//dump( $a->select() );
 		//dump($a->select_one());
-		dump($a->select_column('name'));
+		dump($a->select_col('name'));
+		dump($a->select_grp('name'));
+		dump($a->select_grp('id'));
 	}
 
 	public function test_save(){

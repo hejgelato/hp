@@ -185,16 +185,51 @@ class hp_table{
 		}
 		return $this;
 	}
+	//检查字段名是不是合法的
+	protected function is_valid_col($col){
+		if(in_array($col, $this->fields,true)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//返回的二d数据中键名不再是默认的0123，指定键名
+	public function select_grp($col){
+		if($col){
+			if(!$this->is_valid_col($col)){
+				sys_exit(" table $this->table does not have colomn: $col !");
+			}
+			$this->_select();
+			if($this->query_return){
+				$data_set = $this->query_data_set;
+				$return = array();
+				foreach($data_set as $v){
+					$return[$v[$col]] = $v;
+				}
+				return $return;
+			}else{
+				//查询不到数据的时候返回空白数组
+				return array();
+			}
+		}else{
+			return $this->select();
+		}
+	}
+
 	//只返回指定的列名的数据 一d数据
-	public function select_column($col){
+	public function select_col($col){
 		if(!$col){
 			return array();
 		}
-		$this->_select('*');
+		if(!$this->is_valid_col($col)){
+			sys_exit(" table $this->table does not have colomn: $col !");
+		}
+		$this->_select();
 		$data = $this->query_data_set;
 		$return = array();
 		if($data){
-			foreach($data as  $v){
+			foreach($data as $v){
 				$return[] = $v[$col];
 			}
 		}
@@ -203,8 +238,14 @@ class hp_table{
 	}
 	//返回一条数据，结果是一d数据
 	public function select_one( $select=null ){
-		$result = $this->select($select);
-		return $result[0];
+		$this->_select($select);
+		if($this->query_return){
+			$data_set = $this->query_data_set;
+			return $data_set[0];
+		}else{
+			//查询不到数据的时候返回空白数组
+			return array();
+		}
 	}
 	//只执行select语句
 	protected function _select($select=null){

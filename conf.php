@@ -36,8 +36,11 @@ $hp_default_module = 'test';
 $hp_env_vars['default_module'] = $hp_default_module;
  
 
-
 /**是否是开发模式+++ true or false +++++++++++**/
-$hp_dev_mode = false;
+$hp_dev_mode = true;
 $hp_env_vars['dev_mode'] = $hp_dev_mode;
+
+/**是否记录错误退出信息+++ true or false +++++++++++**/
+$hp_log_error = false;
+$hp_env_vars['log_error'] = $hp_log_error; 
 
