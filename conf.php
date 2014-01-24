@@ -29,12 +29,18 @@ $hp_db_configs['test'] = array(
  
 $hp_env_vars['db_config'] = $hp_db_configs;
 
- 
+
+/**启用的模块列表++++++++++++++++++++**/
+$hp_valid_modules = array('test');
+$hp_env_vars['valid_modules'] = $hp_valid_modules;
+
 /**默认模块++++++++++++++++++++**/
  
 $hp_default_module = 'test';
 $hp_env_vars['default_module'] = $hp_default_module;
  
+
+
 
 /**是否是开发模式+++ true or false +++++++++++**/
 $hp_dev_mode = true;
