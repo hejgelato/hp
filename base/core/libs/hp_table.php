@@ -387,7 +387,6 @@ class hp_table{
 			$this->pdo->beginTransaction();
 			$this->during_transaction = true;
 		}
-
 	}
 	public function commit(){
 		if( $this->during_transaction ){
