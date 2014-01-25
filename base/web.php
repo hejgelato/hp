@@ -4,7 +4,6 @@ define('WEB_PATH',dirname(__FILE__).'/');
 include_once(WEB_PATH."route.php");
 $hp_path = isset($_GET['s'])?$_GET['s']:'/'; 
 if($hp_path){
-	 
 	if(array_key_exists($hp_path, env('route'))){
 		$route = env('route');
 		$hp_path = $route[$hp_path];

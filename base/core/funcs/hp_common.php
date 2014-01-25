@@ -27,7 +27,8 @@ function arr_readable($arr){
 	}
 	return $str;
 } 
-	//输出信息并停止脚本
+
+//输出信息并停止脚本 在开发模式下输出出错信息，打开日志的情况下记录日志
 function sys_exit($msg=''){
 	header('Content-type:text/html;charset=utf8');
 	
@@ -62,7 +63,7 @@ function sys_exit($msg=''){
 	}
 	exit();
 }
-//产生一个警告，在开发模式下输出警告信息
+//产生一个警告，在开发模式下输出警告信息，打开日志的情况下记录日志
 function sys_warn($msg=''){
 	header('Content-type:text/html;charset=utf8');
 	
