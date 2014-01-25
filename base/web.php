@@ -48,7 +48,7 @@ if($hp_path){
 	}
 	if(!in_array($m, env('valid_modules'),true)){
 		//跳到404页面
-		show_404("找不到模块:$m");
+		show_404("找不到模块，不是合法的模块:$m");
 	}
 
 	$hp_env_vars['current_module'] = $m;
