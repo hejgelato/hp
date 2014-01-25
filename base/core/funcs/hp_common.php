@@ -141,3 +141,27 @@ function dump($var, $echo=true, $label=null, $strict=true) {
     }else
         return $output;
 }
+//过滤sql特殊字符
+function daddslashes($string,$strip = FALSE){
+	if(!$string) return $string;
+    if(is_array($string)) {   
+		foreach($string as $key => $val) {   
+			$string[$key] = daddslashes($val, $strip);   
+		}   
+	}else{   
+		$string = addslashes($strip ? stripslashes($string) : $string);   
+	}   
+    return $string;   
+} 
+//trim
+function dtrim( $string ){
+	if(!$string) return $string;
+	if(is_array($string)) {   
+		foreach($string as $key => $val) {   
+			$string[$key] = dtrim($val);   
+		}   
+	}else{   
+		$string = trim($string);   
+	}   
+    return $string;
+}

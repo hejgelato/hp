@@ -2,6 +2,18 @@
 //处理url index.php?s=/sdf/sdf/sdf/sdf/
 define('WEB_PATH',dirname(__FILE__).'/');
 include_once(WEB_PATH."route.php");
+if(isset($_GET)){
+	$_GET = dtrim($_GET);
+}
+if(isset($_POST)){
+	$_POST = dtrim($_POST);
+}
+if(isset($_REQUEST)){ 
+	$_REQUEST = dtrim($_REQUEST);
+}
+if(isset($_COOKIE)){ 
+	$_COOKIE = dtrim($_COOKIE);
+}
 
 $hp_path = isset($_GET['s'])?$_GET['s']:'/'; 
 //把非重写模式的转为重写模式的
