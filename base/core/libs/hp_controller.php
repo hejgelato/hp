@@ -4,8 +4,8 @@ class hp_controller{
 	//路由,子类可以自由重写
 	public function _remap($method){
 		if(method_exists($this, $method)){
-			$func_before = "before_".$method;
-			$func_after  = "after_".$method;
+			$func_before = "a_".$method;
+			$func_after  = "z_".$method;
 
 			if(method_exists($this, $func_before)){
 				$this->$func_before();
