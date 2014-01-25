@@ -128,7 +128,7 @@ class hp_table{
 		if(is_array($data)){
 			$temp_args = array();
 			foreach( $data  as $k=>$v){
-				if(in_array( $k, $this->fields )){
+				if(in_array( $k, $this->fields,true )){
 					$this->data[$k] = '?';
 					$temp_args[] = $v;
 				}
@@ -197,7 +197,8 @@ class hp_table{
 	public function select_grp($col){
 		if($col){
 			if(!$this->is_valid_col($col)){
-				sys_exit(" table $this->table does not have colomn: $col !");
+				sys_warn(" table $this->table does not have colomn: $col !");
+				return false;
 			}
 			$this->_select();
 			if($this->query_return){
@@ -222,7 +223,8 @@ class hp_table{
 			return array();
 		}
 		if(!$this->is_valid_col($col)){
-			sys_exit(" table $this->table does not have colomn: $col !");
+			sys_warn(" table $this->table does not have colomn: $col !");
+			return false;
 		}
 		$this->_select();
 		$data = $this->query_data_set;
@@ -253,7 +255,7 @@ class hp_table{
 	//只执行select语句
 	protected function _select($select=null){
 		if(!$this->table){
-			sys_exit('no table');
+			sys_exit('select with no table');
 		}
 		if(!$select){
 			$select = '*';
@@ -304,7 +306,11 @@ class hp_table{
 	public function save(){
 		//检查一些必要条件
 		if(!$this->table){
-			sys_exit('no table');
+			sys_exit('save with no table');
+		}
+		if(!$this->data){
+			sys_warn('save with no data,function return false');
+			return false;
 		}
 
 		$data_str = $this->parse_data( $this->data );
@@ -319,12 +325,16 @@ class hp_table{
 	//update函数 执行update
 	public function update(){
 		if(!$this->table){
-			sys_exit('no table');
+			sys_exit('update with no table');
+		}
+		if(!$this->data){
+			sys_warn('update with no data,function return false');
+			return false;
 		}
 		$data_str = $this->parse_data( $this->data );
 		//查询sql
 		if(!$this->where){
-			sys_exit("update db without where statement, be careful!"); 
+			sys_warn("update db without where statement, be careful!"); 
 		} 
 		$sql = "update ".$this->table." set $data_str where ".$this->where;
 		$this->sql = $sql;
@@ -338,10 +348,10 @@ class hp_table{
 	//delete函数 , 执行delete
 	public function delete(){
 		if(!$this->table){
-			sys_exit('no table');
+			sys_exit('delete with no table');
 		}
 		if(!$this->where){
-			sys_exit("delete db without where statement, be careful!"); 
+			sys_warn("delete db without where statement, be careful!"); 
 		}
 		$sql = "delete from ".$this->table."  where ".$this->where;
 		 
@@ -363,10 +373,7 @@ class hp_table{
         }
         return rtrim($str, ',');
     }
-	//create 方法，从表单或者数据库接受数据到data
-	public function create(){
-		
-	}
+	
 	//show_error()
 	public function show_error(){
 		dump( $this->pdo->errorCode());
