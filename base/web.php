@@ -99,7 +99,12 @@ if($hp_path){
 	
 	 
 	require_once(WEB_PATH."init.php");
-	
+	$current_module = env('current_module');
+	if($current_module){
+		//载入当前模块的init.php文件
+		include_once(WEB_PATH."../module/{$current_module}/init.php");
+	}
+	 
 	session_start();
 	//运行action
 	if(class_exists($c)){
