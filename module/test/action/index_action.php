@@ -5,7 +5,7 @@ class index_action extends hp_controller{
 		$a = new test();
 		$b = new test();
 		$c = new test();
-		 
+		 dump($_GET);
 		 $this->test_select();
 		// $this->test_save();
 		//$this->test_update();

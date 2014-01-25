@@ -18,7 +18,7 @@ class hp_table{
 	public $query_return = null;            //执行sql语句返回的结果
 	public $query_data_set = null;          //执行sql语句返回的结果集
 	public $query_affected_count = null;    //执行sql语句影响到的行数
-	
+	public $during_transaction  = false;    //是否在事务中
 
 	//初始化，把对象的部分状态初始化，比如单例模式中，虽然不重新new一个对象，但是应该清理之前的
 	//使用者留下的痕迹 被单例函数使用
@@ -34,6 +34,7 @@ class hp_table{
 		$this->query_return = null;
 		$this->query_data_set = null;
 		$this->query_affected_count = null;
+		$this->during_transaction = false;
 	}
 
 	public function __construct(){
@@ -97,7 +98,7 @@ class hp_table{
 		$this->query_return = null;
 		$this->query_data_set = null;
 		$this->query_affected_count = null;
-
+		
 		$stat = $this->pdo->prepare ( $sql );
 		$result = $stat->execute( $args );
 		$this->query_return = $result;
@@ -112,7 +113,7 @@ class hp_table{
 				dump($stat->errorInfo());
 			
 				$this->show_error();
-				sys_exit("sql语句执行返回了false");
+				sys_warn("sql语句执行返回了false");
 			}
 		}
 	}
@@ -280,6 +281,7 @@ class hp_table{
 		$sql = "select ".$this->select." from ".$this->table." $where_str $order_str $limit_str";
 		$this->sql = $sql;
 		$this->exe_sql( $sql, $this->args_where );
+		
 	}
 	//select方法，查询sql
 	public function select($select=null){
@@ -288,8 +290,7 @@ class hp_table{
 			$data_set = $this->query_data_set;
 			return $data_set;
 		}else{
-			//查询不到数据的时候返回空白数组
-			return array();
+			$this->query_return;
 		}
 	}
  
@@ -378,5 +379,33 @@ class hp_table{
 	public function show_error(){
 		dump( $this->pdo->errorCode());
 		dump( $this->pdo->errorInfo());
+	}
+
+	//事wu支持
+	public function begin(){
+		if(!$this->during_transaction ){
+			$this->pdo->setAttribute( PDO::ATTR_AUTOCOMMIT, 0 );
+			$this->pdo->beginTransaction();
+			$this->during_transaction = true;
+		}
+
+	}
+	public function commit(){
+		if( $this->during_transaction ){
+			$this->pdo->commit();
+			$this->pdo->setAttribute( PDO::ATTR_AUTOCOMMIT, 1 );
+			$this->during_transaction = false;
+			
+			
+		}
+	}
+	public function rollback(){
+		if( $this->during_transaction ){
+			$this->pdo->rollBack();
+			$this->pdo->setAttribute( PDO::ATTR_AUTOCOMMIT, 1 );
+			$this->during_transaction = false;
+			
+			
+		}
 	}
 }

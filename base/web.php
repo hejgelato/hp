@@ -2,7 +2,31 @@
 //处理url index.php?s=/sdf/sdf/sdf/sdf/
 define('WEB_PATH',dirname(__FILE__).'/');
 include_once(WEB_PATH."route.php");
+
 $hp_path = isset($_GET['s'])?$_GET['s']:'/'; 
+//把非重写模式的转为重写模式的
+if(env('url_rewrite_off')){
+	$hp_m = isset($_GET['m'])?"/".trim($_GET['m']):'/'.env('default_module');
+	$hp_c = isset($_GET['c'])?"/".trim($_GET['c']):'/index';
+	$hp_a = isset($_GET['a'])?"/".trim($_GET['a']):'/index';
+	if(isset($_GET['m'])){
+		unset($_GET['m']);
+	}
+	if(isset($_GET['c'])){
+		unset($_GET['c']);
+	}
+	if(isset($_GET['a'])){
+		unset($_GET['a']);
+	}
+	$hp_temp = '';
+	foreach($_GET as $k=>$v){
+		$hp_temp .= "/{$k}/{$v}";
+	}
+	$hp_path = "{$hp_m}{$hp_c}{$hp_a}".$hp_temp;
+	if(!$hp_path){
+		$hp_path = '/';
+	}
+}
 if($hp_path){
 	if(array_key_exists($hp_path, env('route'))){
 		$route = env('route');
@@ -20,9 +44,9 @@ if($hp_path){
 	if(isset($new[0])){
 		$m = trim(array_shift($new));
 	}else{
-		$m = $hp_default_module;
+		$m = env('default_module');
 	}
-	if(!in_array($m, env('valid_modules'), true)){
+	if(!in_array($m, env('valid_modules'),true)){
 		//跳到404页面
 		show_404("找不到模块:$m");
 	}

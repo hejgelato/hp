@@ -41,6 +41,9 @@ $hp_default_module = 'test';
 $hp_env_vars['default_module'] = $hp_default_module;
 
 /**url模式+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**/
+$hp_url_rewrite_off = true;
+$hp_env_vars['url_rewrite_off'] = $hp_url_rewrite_off;
+
 
 
 /**是否是开发模式+++ true or false +++++++++++++++++++++++++++++++++++**/
