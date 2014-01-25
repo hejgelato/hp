@@ -62,6 +62,41 @@ function sys_exit($msg=''){
 	}
 	exit();
 }
+//产生一个警告，在开发模式下输出警告信息
+function sys_warn($msg=''){
+	header('Content-type:text/html;charset=utf8');
+	
+	$log = array();
+	$log['warn_msg'] = $msg;
+	$log['hp_path'] = env('hp_path');
+	 
+	if(isset($_SESSION)){
+		$log['session_str'] = arr_readable($_SESSION);
+	}
+	if(isset($_SERVER['HTTP_USER_AGENT'])){
+		$log['agent'] = $_SERVER['HTTP_USER_AGENT'];
+	}
+	if(isset($_SERVER['HTTP_REFERER'])){
+		$log['ref'] = $_SERVER['HTTP_REFERER'];
+	}
+	$info =  debug_backtrace();
+	if($info){
+		foreach($info as $var){
+			$log[] = $var['file'].':'.$var['line'];
+		}
+	}
+	 
+	if(env('dev_mode')){
+		echo "系统产生了一个警告";
+		dump( $log );
+	}  
+	//记录日志
+	if(env('log_user_runtime')){
+		logger::write('php_sys_warn_log',$log);
+	}
+	 
+}
+
 //utf8 的输出错误并退出
 function cn_exit($msg){
 	header('Content-type:text/html;charset=utf8');
