@@ -60,6 +60,7 @@ class index_action extends hp_controller{
 	}
 	public function _z(){
 		echo "<br>"; echo "ends";
+		$this->tpl->display('readme.html');
 	}
 
 	public function test_create(){

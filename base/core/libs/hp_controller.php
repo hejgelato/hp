@@ -5,7 +5,7 @@ class hp_controller{
 	public function __construct(){
 		include_once(INIT_PATH.'tool/smarty/Smarty.class.php');
 		$smarty = new Smarty;
-		$smarty->template_dir = CONF_PATH.'Tpl/';
+		$smarty->template_dir = MODULE_INIT_PATH.'html/';
 		$smarty->compile_dir = CONF_PATH.'files/smarty/templates_c/';
 		$smarty->config_dir = CONF_PATH.'files/smarty/configs/';
 		$smarty->cache_dir = CONF_PATH.'files/smarty/cache/';
