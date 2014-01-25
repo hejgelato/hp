@@ -20,7 +20,7 @@ class index_action extends hp_controller{
 		 
 		//dump( $a->select() );
 		//dump($a->select_one());
-		dump($a->select_col('xname'));
+		dump($a->select_col('name'));
 		dump($a->select_grp('name'));
 		dump($a->select_grp('id'));
 	}
@@ -60,5 +60,13 @@ class index_action extends hp_controller{
 	}
 	public function _z(){
 		echo "<br>"; echo "ends";
+	}
+
+	public function test_create(){
+		$a = new test();
+		 
+ 
+		$a->where('id=?',array(1))->data(array('name'=>25))->update();
+		 
 	}
 }
