@@ -381,7 +381,7 @@ class hp_table{
 		dump( $this->pdo->errorInfo());
 	}
 
-	//事wu支持
+	//事wu支持 不要和原生的pdo事务函数混用。
 	public function begin(){
 		if(!$this->during_transaction ){
 			$this->pdo->setAttribute( PDO::ATTR_AUTOCOMMIT, 0 );
@@ -395,8 +395,6 @@ class hp_table{
 			$this->pdo->commit();
 			$this->pdo->setAttribute( PDO::ATTR_AUTOCOMMIT, 1 );
 			$this->during_transaction = false;
-			
-			
 		}
 	}
 	public function rollback(){
