@@ -69,4 +69,11 @@ class index_action extends hp_controller{
 		$a->where('id=?',array(1))->data(array('name'=>25))->update();
 		 
 	}
+	public function before_test_delete(){
+		
+	}
+
+	public function after_test_delete(){
+	
+	}
 }

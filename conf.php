@@ -39,8 +39,8 @@ $hp_env_vars['valid_modules'] = $hp_valid_modules;
  
 $hp_default_module = 'test';
 $hp_env_vars['default_module'] = $hp_default_module;
- 
 
+/**url模式+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**/
 
 
 /**是否是开发模式+++ true or false +++++++++++++++++++++++++++++++++++**/
