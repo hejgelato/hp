@@ -1,5 +1,5 @@
 <?php
-class article{
+class article extends hp_table{
 	public $table = 'article';
 	public $fields = array(
 		'article_id',

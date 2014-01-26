@@ -1,5 +1,7 @@
 <?php
-class user-article-author{
+class user-article-author extends hp_table{
+	//由于是关联表
+	public $relate->single('')
 	public $table = 'user-article-author';
 	public $fields = array(
 		'user-article-author_id',
