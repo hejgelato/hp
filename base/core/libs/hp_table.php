@@ -3,7 +3,7 @@
 class hp_table{
 	static $con = null;                //用于存放一个数据库连接,检查单例
 	public $db_conf = 'default';             //数据库配置
-	
+
 	public $fields = array();               //表对应的字段
 	public $pdo = null;                     //对象的数据库连接
 	public $table = '';                     //对应的表
@@ -19,6 +19,11 @@ class hp_table{
 	public $query_data_set = null;          //执行sql语句返回的结果集
 	public $query_affected_count = null;    //执行sql语句影响到的行数
 	public $during_transaction  = false;    //是否在事务中
+
+	//表的主键字段名,这里是默认的，子类可以自由重写
+	public function pk_name(  ){
+		return $this->table.'_id';
+	}
 
 	//初始化，把对象的部分状态初始化，比如单例模式中，虽然不重新new一个对象，但是应该清理之前的
 	//使用者留下的痕迹 被单例函数使用

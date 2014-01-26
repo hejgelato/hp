@@ -58,6 +58,9 @@ class index_action extends hp_controller{
 		dump($a->query("delete from test where age =?", array( 2)));
 		
 	}
+	public function index_z(){
+		echo "<br>";echo "index ends";
+	}
 	public function _z(){
 		echo "<br>"; echo "ends";
 		$this->tpl->display('readme.html');
@@ -70,11 +73,5 @@ class index_action extends hp_controller{
 		$a->where('id=?',array(1))->data(array('name'=>25))->update();
 		 
 	}
-	public function before_test_delete(){
-		
-	}
-
-	public function after_test_delete(){
-	
-	}
+	 
 }

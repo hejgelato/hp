@@ -1,6 +1,6 @@
 <?php
 define('INIT_PATH',dirname(__FILE__).'/');
-
+define('TOOL_PATH',INIT_PATH.'tool/');
 //自动载入
 function loader( $class ){
 	$current_module = env('current_module');

@@ -3,7 +3,7 @@
 class hp_controller{
 
 	public function __construct(){
-		include_once(INIT_PATH.'tool/smarty/Smarty.class.php');
+		include_once(TOOL_PATH.'smarty/Smarty.class.php');
 		$smarty = new Smarty;
 		$smarty->template_dir = MODULE_INIT_PATH.'html/';
 		$smarty->compile_dir = CONF_PATH.'files/smarty/templates_c/';
@@ -31,8 +31,8 @@ class hp_controller{
 	//路由,子类可以自由重写
 	public function _remap($method){
 		if(method_exists($this, $method)){
-			$func_before = "a_".$method;
-			$func_after  = "z_".$method;
+			$func_before = $method."_a";
+			$func_after  = $method."_z";
 
 			if(method_exists($this, $func_before)){
 				$this->$func_before();
