@@ -2,7 +2,7 @@
 //数据表操作类的基类
 class hp_table{
 	static $con = null;                //用于存放一个数据库连接,检查单例
-	public $db_conf = 'default';             //数据库配置
+	public $db_conf = 'default';            //数据库配置
 
 	public $fields = array();               //表对应的字段
 	public $pdo = null;                     //对象的数据库连接
@@ -10,7 +10,7 @@ class hp_table{
 	public $where = '';                     //查询条件
 	public $args_where  = array();			//sql语句查询条件用的代替？的参数
 	public $args_data   = array();          //sql语句插入或者更新部分用的代替?的参数
-	public $data = array();                 //数据
+	public $data = array();                 //数据，用于更新和insert
 	public $order = '';                     //排序语句
 	public $limit = '';                     //limit 语句
 	public $select = '';                    //select语句
@@ -25,8 +25,8 @@ class hp_table{
 		return $this->table.'_id';
 	}
 
-	//初始化，把对象的部分状态初始化，比如单例模式中，虽然不重新new一个对象，但是应该清理之前的
-	//使用者留下的痕迹 被单例函数使用
+	//初始化，把对象的部分状态初始化，比如单例模式中，虽然不重新new一个对象，但是应该清理//之前的
+	//使用者留下的痕迹 被单例函数使用 
 	public function _renew(){
 		$this->where = '';    
 		$this->args_where = array();
@@ -52,7 +52,7 @@ class hp_table{
 	static public function get_pdo( $conf ){ 
 		$mark = data_key::data_get_key($conf);
 		if(!$mark){
-			sys_exit('db config key empty!');
+			sys_exit('db config mark empty!');
 		}
 		if( !isset( self::$con[$mark] )){  
 			try {
@@ -70,6 +70,9 @@ class hp_table{
 		return self::$con[$mark];
 	}
 	//通用的执行sql的函数
+	// query("select * from xx where id = ? and age = ?", array($id,$age));
+	// query("update xx set a = ? where b =? limti 1", array($a,$b));
+	// query("select * from xx where id = 24");   //第二个参数在第一个参数中没有占位？的// 时候可以省略
 	public function query( $sql, $args = array()){
 		$sql = trim($sql);
 		if(sql_start($sql, 'update','delete')){
@@ -98,7 +101,7 @@ class hp_table{
 			sys_exit("can only query() select, insert ,update, delete.");
 		}
 	}
-	//执行sql
+	//执行sql 
 	protected function exe_sql($sql, $args = array()) {
 		$this->query_return = null;
 		$this->query_data_set = null;
@@ -128,8 +131,9 @@ class hp_table{
 		$this->table = trim($table);
 		return $this;
 	}
-	//data方法，设置数据 参数只能是一d数组
-	public function data( $data=null ){
+	//data方法，设置数据 参数只能是一d数组 被this->fields过滤合法字段名
+	//data(array('name'=>'mike','age'=>25))
+	public function data( $data=array() ){
 		$this->data = array();
 		if(is_array($data)){
 			$temp_args = array();
@@ -149,7 +153,10 @@ class hp_table{
 
 
 	//where方法，设置查询条件
-	public function where($where=null, $args = array()){
+	//where("id = 5")
+	//where("id = ?",array($id))
+	//where(array("id"=>$a,"age"=>$age))
+	public function where($where='', $args = array()){
 		if(!$where){
 			$this->where = '';
 			$this->args_where = array();
@@ -171,7 +178,9 @@ class hp_table{
 		return $this;
 	}
 	//order方法，设置排序
-	public function order($order=null){
+	// order("age asc")
+	// order("createtime desc");
+	public function order($order=''){
 		if(!$order){
 			$this->order = '';
 		}else{
@@ -192,18 +201,18 @@ class hp_table{
 	}
 	//检查字段名是不是合法的
 	protected function is_valid_col($col){
-		if(in_array($col, $this->fields,true)){
+		if(in_array($col, $this->fields, true)){
 			return true;
 		}else{
 			return false;
 		}
 	}
 
-	//返回的二d数据中键名不再是默认的0123，指定键名
+	//返回的二d数据中键名不再是默认的0123，指定键名,col上的值如果重复后面的会覆盖前面的
 	public function select_grp($col){
 		if($col){
 			if(!$this->is_valid_col($col)){
-				sys_warn(" table $this->table does not have colomn: $col !");
+				sys_warn(" table {$this->table} does not have colomn: $col !");
 				return false;
 			}
 			$this->_select();
@@ -215,8 +224,7 @@ class hp_table{
 				}
 				return $return;
 			}else{
-				//查询不到数据的时候返回空白数组
-				return array();
+				$this->query_return;
 			}
 		}else{
 			return $this->select();
@@ -233,33 +241,42 @@ class hp_table{
 			return false;
 		}
 		$this->_select();
-		$data = $this->query_data_set;
-		$return = array();
-		if($data){
+		if($this->query_return){
+			$data = $this->query_data_set;
+			if(!$data){
+				return array();
+			}
+			$return = array();
 			foreach($data as $v){
 				$return[] = $v[$col];
 			}
+			return $return;
+		}else{
+			$this->query_return;
 		}
-		return $return;
+		
 		 
 	}
 	//返回一条数据，结果是一d数据
-	public function select_one( $select=null ){
+	public function select_one( $select='' ){
 		$this->_select($select);
 		if($this->query_return){
 			$data_set = $this->query_data_set;
-			return $data_set[0];
+			if(isset($data_set[0])){
+				return $data_set[0];
+			}else{
+				return array();
+			}
 		}else{
-			//查询不到数据的时候返回空白数组
-			return array();
+			return $this->query_return;
 		}
 	}
-	//同select_one
-	public function select_first($select=null){
+	//同select_one，一模一样的函数
+	public function select_first($select=''){
 		return $this->select_one($select);
 	}
 	//只执行select语句
-	protected function _select($select=null){
+	protected function _select($select=''){
 		if(!$this->table){
 			sys_exit('select with no table');
 		}
@@ -289,7 +306,7 @@ class hp_table{
 		
 	}
 	//select方法，查询sql
-	public function select($select=null){
+	public function select($select=''){
 		$this->_select($select);
 		if($this->query_return){
 			$data_set = $this->query_data_set;
@@ -298,11 +315,16 @@ class hp_table{
 			$this->query_return;
 		}
 	}
- 
+	// $a->where('xx')->count();
 	public function count($count='*'){
 		$count = $this->select_one(" count( $count ) as c ");
 		if($count){
-			return $count['c'];
+			if(isset($count['c'])){
+				return $count['c'];
+			}else{
+				// almost impossible to happen .
+				sys_warn("count query result have no data");
+			}
 		}else{
 			return 0;
 		}
@@ -312,10 +334,10 @@ class hp_table{
 	public function save(){
 		//检查一些必要条件
 		if(!$this->table){
-			sys_exit('save with no table');
+			sys_exit('save with no db table');
 		}
 		if(!$this->data){
-			sys_warn('save with no data,function return false');
+			sys_warn('save with no data,function returning false');
 			return false;
 		}
 
@@ -331,10 +353,10 @@ class hp_table{
 	//update函数 执行update
 	public function update(){
 		if(!$this->table){
-			sys_exit('update with no table');
+			sys_exit('update with no db table');
 		}
 		if(!$this->data){
-			sys_warn('update with no data,function return false');
+			sys_warn('update with no data,function returning false');
 			return false;
 		}
 		$data_str = $this->parse_data( $this->data );
@@ -354,7 +376,7 @@ class hp_table{
 	//delete函数 , 执行delete
 	public function delete(){
 		if(!$this->table){
-			sys_exit('delete with no table');
+			sys_exit('delete with no db table');
 		}
 		if(!$this->where){
 			sys_warn("delete db without where statement, be careful!"); 
@@ -375,12 +397,13 @@ class hp_table{
         $str = '';
         foreach($arr as $k=>$v){
 			$kk = strtolower($k);
+			//在被save,update调用的时候$v基本上都是符号?
             $str .= "`$kk` = $v ,";
         }
         return rtrim($str, ',');
     }
 	
-	//show_error()
+	//show_error() ,用于输出sql执行失败的错误
 	public function show_error(){
 		dump( $this->pdo->errorCode());
 		dump( $this->pdo->errorInfo());
