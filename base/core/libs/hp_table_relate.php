@@ -11,7 +11,7 @@ class hp_table_relate extends hp_table{
 		if(!$table_name){
 			sys_exit("没有设置表名");
 		}
-		$names = explode('-', $table_name);
+		$names = explode('_', $table_name);
 		return $names[0];
 	}
 	public function second_relate_table(){
@@ -19,7 +19,7 @@ class hp_table_relate extends hp_table{
 		if(!$table_name){
 			sys_exit("没有设置表名");
 		}
-		$names = explode('-', $table_name);
+		$names = explode('_', $table_name);
 		return $names[1];
 	}
 	//重写data方法，检查fields的范围为相关联的所有表字段
@@ -47,16 +47,16 @@ class hp_table_relate extends hp_table{
 	}
 	//重写where方法，添加联表查询的条件
 	public function where($where=null, $args = array()){
-		$first_table = $this->first_relate_table();
+		$first_table = single($this->first_relate_table());
 		$first_pk = $first_table->pk_name();
-		$second_table = $this->second_relate_table();
+		$second_table = single($this->second_relate_table());
 		$second_pk = $second_table->pk_name();
 		$this_table = $this->table;
 		 
 		if(!$this_table){
 			sys_exit("没有设置表名");
 		}
-		$relate_where = " {$first_tabe}.{$first_pk} = {$this_table}.{$first_pk} and {$this_table}.{$second_pk} = {$second_table}.{$second_pk}  ";
+		$relate_where = $this->first_relate_table().".{$first_pk} = {$this_table}.{$first_pk} and {$this_table}.{$second_pk} = ".$this->second_relate_table().".{$second_pk}  ";
 
 		
 		if(!$where){

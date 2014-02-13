@@ -343,6 +343,7 @@ class hp_table{
 
 		$data_str = $this->parse_data( $this->data );
 		$sql = "insert into ".$this->table." set $data_str";  
+		$this->sql = $sql;
 		$this->exe_sql( $sql, $this->args_data );
 		if($this->query_return){
 			return $this->pdo->lastInsertId();

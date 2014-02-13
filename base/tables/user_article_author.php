@@ -9,6 +9,8 @@ class user_article_author extends hp_table{
 	);
 
 	public function rel(){
-		return single('hp_table_relate');
+		$m = single('hp_table_relate');
+		$m->table = 'user_article_author';
+		return $m;
 	}
 }
