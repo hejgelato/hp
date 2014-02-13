@@ -85,7 +85,7 @@ class index_action extends hp_controller{
 		//$a->data(array('user_id'=>1,'article_id'=>1,'status'=>'open'))->save();
 		$a = new user_article_author();
 		$b = $a->rel();
-		dump ($b->where('user_id = 1')->select());
+		dump ($b->where('user.user_id = 1')->select());
 		dump($b->sql);
 	}
 	 
