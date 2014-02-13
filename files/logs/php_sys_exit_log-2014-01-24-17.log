@@ -1,0 +1,44 @@
+createtime --> 2014-01-24 17:03:40
+exit_msg -->  table test does not have colomn: xname !
+hp_path --> /test
+session_str --> 
+agent --> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36
+0 --> D:\wamp\www\hp\trunk\base\core\libs\hp_table.php:225
+1 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:23
+2 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:9
+3 --> D:\wamp\www\hp\trunk\base\core\libs\hp_controller.php:7
+4 --> D:\wamp\www\hp\trunk\base\web.php:86
+5 --> D:\wamp\www\hp\trunk\index.php:7
+createtime --> 2014-01-24 17:03:41
+exit_msg -->  table test does not have colomn: xname !
+hp_path --> /test
+session_str --> 
+agent --> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36
+0 --> D:\wamp\www\hp\trunk\base\core\libs\hp_table.php:225
+1 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:23
+2 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:9
+3 --> D:\wamp\www\hp\trunk\base\core\libs\hp_controller.php:7
+4 --> D:\wamp\www\hp\trunk\base\web.php:86
+5 --> D:\wamp\www\hp\trunk\index.php:7
+createtime --> 2014-01-24 17:05:36
+exit_msg -->  table test does not have colomn: xname !
+hp_path --> /test
+session_str --> 
+agent --> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36
+0 --> D:\wamp\www\hp\trunk\base\core\libs\hp_table.php:225
+1 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:23
+2 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:9
+3 --> D:\wamp\www\hp\trunk\base\core\libs\hp_controller.php:7
+4 --> D:\wamp\www\hp\trunk\base\web.php:86
+5 --> D:\wamp\www\hp\trunk\index.php:7
+createtime --> 2014-01-24 17:05:56
+exit_msg -->  table test does not have colomn: xname !
+hp_path --> /test
+session_str --> 
+agent --> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36
+0 --> D:\wamp\www\hp\trunk\base\core\libs\hp_table.php:225
+1 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:23
+2 --> D:\wamp\www\hp\trunk\module\test\action\index_action.php:9
+3 --> D:\wamp\www\hp\trunk\base\core\libs\hp_controller.php:7
+4 --> D:\wamp\www\hp\trunk\base\web.php:86
+5 --> D:\wamp\www\hp\trunk\index.php:7
