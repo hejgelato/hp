@@ -73,5 +73,20 @@ class index_action extends hp_controller{
 		$a->where('id=?',array(1))->data(array('name'=>25))->update();
 		 
 	}
+
+	public function test_rel(){
+		//$a = new user();
+		//$data1 = array('name'=>'jack','age'=>24);
+		//$a->data($data1)->save();
+
+		//$a = new article();
+		//$a->data(array('title'=>'art1','content'=>'test'))->save();
+		//$a = new user_article_author();
+		//$a->data(array('user_id'=>1,'article_id'=>1,'status'=>'open'))->save();
+		$a = new user_article_author();
+		$b = $a->rel();
+		dump ($b->where('user_id = 1')->select());
+		dump($b->sql);
+	}
 	 
 }

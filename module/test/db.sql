@@ -5,7 +5,7 @@ create table user(
 	
 	primary key(`user_id`),
 	index(`name`)
-)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 create table article(
 	`article_id` int unsigned not null auto_increment,
@@ -13,7 +13,7 @@ create table article(
 	`content` text,
 	primary key(`article_id`)
 	 
-)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 
@@ -25,4 +25,4 @@ create table `user-article-author`(
 
 	primary key(`user-ariticle-author_id`)
 	 
-)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
