@@ -16,6 +16,7 @@ $a->where("name = 'mike'")->select('name');
 $a->where("name = 'mike'")->select_col('name');
 //把id的值放在二维数组的键上
 $a->where("name = 'mike'")->select_grp('id');
+$a->where("name = 'mike'")->select_one('id');
 
 //插入
 $data = array('name'=>'mike','age'=>25);
